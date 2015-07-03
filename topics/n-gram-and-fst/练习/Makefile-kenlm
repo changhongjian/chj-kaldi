@@ -1,0 +1,10 @@
+
+
+# 长虹剑自己制作的
+CXXFLAGS=-DKENLM_MAX_ORDER=6 -I/data/zyou/wpr/software/kenlm   -lm -lpthread -ldl  \
+  -lboost_system-mt -lboost_thread-mt -lz -lbz2 \
+   -Llib -lkenlm
+
+all:
+#	g++ -o lx  lx.cc $(CXXFLAGS) 
+	g++ -o lx-jg  lx-jg.cc $(CXXFLAGS)

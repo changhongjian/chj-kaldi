@@ -1,0 +1,47 @@
+http://www.openfst.org/twiki/bin/view/FST/FstQuickTour#FST_Operations 我从这里入了门
+
+1.****openfst 开来是一个结构体，就是 一对，包括符号数字的状态以及权重，但是start和final有些特殊，回想fst建立的方式会明白。
+2.首先关于fst文件的一些查看
+fstprint --isymbols=isyms.txt --osymbols=osyms.txt binary.fst text.fst  没有symbols也行
+fstdraw --isymbols=isyms.txt --osymbols=osyms.txt binary.fst binary.dot
+dot -Tps binary.dot >binary.ps    （之后我用WinEdt 8转化成了pdf看到了图片）
+或者 dot -Tpng fst.dot > fst.png   / dot -Tpng fst.dot -o fst.png (不过可能角度不对，翻转如下)
+E:\pictureImpl\ImageMagick\ImageMagick-68.8-Q16\convert.exe -rotate 90 fst.png fst90.png
+
+
+***** 如何把文法文件生成 fst格式的文件
+kaldi timit中的 local/timit_format_data.sh 里面有关于根据文法生成fst的方式。
+gunzip -c $lmdir/lm_phone_${lm_suffix}.arpa.gz | \
+    egrep -v '<s> <s>|</s> <s>|</s> </s>' | \   #我怎么感觉这个一般不会有
+    arpa2fst - | fstprint | \
+    utils/eps2disambig.pl | utils/s2eps.pl | fstcompile --isymbols=$test/words.txt \
+     --osymbols=$test/words.txt  --keep_isymbols=false --keep_osymbols=false | \
+    fstrmepsilon | fstarcsort --sort_type=ilabel > $test/G.fst
+
+egrep效果与grep -E相同
+
+eps2disambig.pl 也就是为了把arpa2fst产生的eps变成 #0 貌似是为了自环，并不是所有的esp都要变
+s:^(\d+\s+\d+\s+)\<eps\>(\s+):$1#0$2:;
+s2eps.pl 的作用仅仅是把 <s> 换成 <eps>
+@A = split(" ", $_);
+if ( @A >= 4 ) {
+    if ($A[2] eq "<s>" || $A[2] eq "</s>") { $A[2] = "<eps>"; }
+    if ($A[3] eq "<s>" || $A[3] eq "</s>") { $A[3] = "<eps>"; }
+}
+print join("\t", @A) . "\n";  #最后加的居然是\t
+
+fstrmepsilon 居然又去掉eps 
+
+---------
+一段翻译
+将回退弧上的<eps>（ε）符号转换为一个特殊的符号#0，以保证语法文件是确定的（determinizable），见 Disambiguation symbols. 如果你不知道“回退弧”是什么，你可以参考关于回退N元语法的文献，例如Goodman的“A bit of progress in language modeling”，以及我们前面引用的Mohri的论文。 命令s2eps.pl 将句首和句末符号<s> 和 </s> 转换为epsilon（<eps>）， 意即“没有符号”。fstcompile 是一个OpenFst命令，可将文本形式的FST转换为二进制形式的。 fstrmepsilon也是一个OpenFst命令，可将FST中由<s> 和 </s> 替换而来的少量的<eps>符号移除掉。
+
+---------
+关于apra2fst 详见kaldi-lmtable.h/cc
+.h 的 ConvertArpaLogProbToWeight 对于一个数 n
+ln( 10^n ) = -2.302585 * n (n>=0)
+           = 2.302585 * n (n<0)
+所以用的时候要加-号
+
+还有用法如下：比如找 2,4的概率
+那么一开始 必须从状态1开始 ，然后 arc为2:2的弧，并获得一个到达的状态，从那个状态找 4:4 就可以了，不用管之前的权重。

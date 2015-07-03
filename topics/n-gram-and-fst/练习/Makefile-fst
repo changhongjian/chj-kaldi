@@ -1,0 +1,21 @@
+CXX = g++
+MYFLAGS = -Wno-deprecated -DKENLM_MAX_ORDER=6
+openfst_dir=/data/zyou/wpr/software/kaldi-trunk/tools/openfst-1.3.4
+kenlm_dir=/data/zyou/wpr/software/kenlm
+
+INCLUDES := -I. -I$(openfst_dir)/include -I$(kenlm_dir)
+CXXFLAGS = -O2 -msse2  $(MYFLAGS) $(INCLUDES) -fPIC
+LDFLAGS = -L. -lpthread  -lboost_system-mt -lboost_thread-mt -lz -lbz2   \
+   -Wl,-R /usr/lib64 -Wl,-R /usr/local/lib -Wl,-R /lib64 \
+ -L$(openfst_dir)/lib -lfst  -Wl,-rpath=$(openfst_dir)/lib -L/$(kenlm_dir)/lib/ -lkenlm $(kenlm_dir)/lib/libkenlm.a 
+
+all:
+#	$(CXX) $(CXXFLAGS)  -c -o lstm.o  lstm.cpp  $(LDFLAGS)
+#	$(CXX) $(CXXFLAGS)  -c -o test.o test.cpp $(LDFLAGS)
+#	$(CXX) $(CXXFLAGS)  $(LDFLAGS) first.cc  -o main 
+	$(CXX) $(CXXFLAGS)   second.cc $(LDFLAGS) -o main1
+#上面 $(LDFLAGS) 的位置只能在中间 
+clean:
+	rm -f *.o
+	rm -f main*
+

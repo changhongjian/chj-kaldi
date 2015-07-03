@@ -1,0 +1,1 @@
+This dir saves my scripts,it may same as utils , steps even local in kaldi ,bu I use different dirs to distinguish them. By doing this I hope to manage my script easier . so when using , 'ln -s <src> <dis>' first
