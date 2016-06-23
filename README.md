@@ -1,4 +1,4 @@
-This is just my summary, so it not clear for much people.
-ÕâÊÇÎÒ¸öÈËµÄ×Ü½á£¬¿ÉÄÜ¶Ô´ó¶àÊıÈË»á²»Çå³ş¡£ 
-½ö±£´æÔ­kaldiÖĞÃ»ÓĞµÄ¡£
+This is just my summary, so it not clear for most people.
+è¿™æ˜¯æˆ‘ä¸ªäººçš„æ€»ç»“ï¼Œå¯èƒ½å¯¹å¤§å¤šæ•°äººä¼šä¸æ¸…æ¥šã€‚ 
+ä»…ä¿å­˜åŸkaldiä¸­æ²¡æœ‰çš„ã€‚
 
