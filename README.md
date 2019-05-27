@@ -1,4 +1,5 @@
-This is just my summary, so it not clear for most people.
-这是我个人的总结，可能对大多数人会不清楚。 
-仅保存原kaldi中没有的。
+This code is about speech recognition using kaldi. (LSTM, CTC and my tries to accelerate it)
+
+** This is just my summary, so it not clear for most people. ** You may no need to see them and I don't study it now.
+
 
